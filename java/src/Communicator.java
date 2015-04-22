@@ -7,80 +7,76 @@ import java.util.Scanner;
 
 
 public class Communicator {
-	private static InetAddress host;
-	private static Socket connection=null;//set null for validation in getter
-	private static PrintWriter output=null;//set null for validation in getter
-	private static int port=2015;
+	private  InetAddress host;
+	private  Socket connection=null;//set null for validation in getter
+	private  PrintWriter output=null;//set null for validation in getter
+	private  int port=2015;
+	public void reconnect(){
+		close();
+		connect();
+	}
 	public Communicator(){
-		setHost();
-		setConnection();
-		setOutput();
+		connect();
 	}
-	public static Socket getConnection() {
-		while(connection == null)
-			setConnection();
-		return connection;
-	}
-	public static PrintWriter getOutput() {
-		while(output == null)
-			setOutput();
-		return output;
-	}
-	public static InetAddress getHost() {
-		while(host == null)
-			setHost();
-		return host;
-	}
-	
-	public static boolean setOutput() {
-		try{
-			PrintWriter output =new PrintWriter(getConnection().getOutputStream(),true);
-			}
-		catch(IOException e){
-			return false;
-		}
-		return true;
-	}
-	public static boolean setHost() {
+	public void connect(){
 		try{
 			host=InetAddress.getLocalHost();
+			try{
+				connection=new Socket(host,port);
+				try{
+					output =new PrintWriter(getConnection().getOutputStream(),true);
+					}
+				catch(IOException e){
+					System.out.println(e + "/n cannot set output! ");
+				}
+			}catch (IOException e){
+				System.out.println(e + " /n can not finde server !");
+			}
+			
 		}catch(UnknownHostException e){
-			return false;
+			System.out.println(e + " /n can not set host !");
 		}
-		return true;
+
+		
 	}
-	public static boolean setConnection() {
-		try{
-			connection=new Socket(getHost(),port);
-		}catch (IOException e){
-			return false;
-		}
-			return true;
+	public  Socket getConnection() {
+		return connection;
 	}
-	public static void send(String str){
-		if(connection==null){
-			setConnection();
-			setHost();
-		}
-		getOutput().println(str);
+	public void send(String str){
+
+			/*try{
+				PrintWriter output =new PrintWriter(getConnection().getOutputStream(),true);
+				output.println(str);
+				System.out.println("sended : " + str);
+
+			}
+			catch(IOException e){
+				System.out.println(e);
+			}*/
+		output.println(str);
+		System.out.println("sended : " + str);
+
 	}
 	public void close(){
-		try
-		{
-			System.out.println(
-			"\n* Closing connection… *");
-			connection.close(); 
-		}
-		catch(IOException ioEx)
-		{
-			System.out.println(
-			"Unable to disconnect!");
-			System.exit(1);
-		}
-		catch (NullPointerException e2) {
-			// TODO: handle exception
-			System.out.println(e2);
-		}
+		if(connection != null)
+			try
+			{
+				System.out.println(
+				"\n* Closing connection… *");
+				connection.close(); 
+			}
+			catch(IOException ioEx)
+			{
+				System.out.println(
+				"Unable to disconnect!");
+				System.exit(1);
+			}
+			catch (NullPointerException e2) {
+				// TODO: handle exception
+				System.out.println(e2 + " /n befor closed !");
+			}
 	}
+
+
 	
 }
