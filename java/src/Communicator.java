@@ -16,7 +16,7 @@ public class Communicator {
 		connect();
 	}
 	public Communicator(){
-		connect();
+		//connect();
 	}
 	public void connect(){
 		try{

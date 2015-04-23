@@ -29,13 +29,15 @@ public class HotWire {
 			n.nextLine();
 			test_device();
 		}*/
+		
                 
-                Shape sh=new Shape();
+/*                Shape sh=new Shape();
                 sh.getFromFile("t.obj");
                 View b = new View(sh.getPoints());
                 b.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 b.setVisible(true);
-                b.setSize(400,400);
+                b.setSize(400,400);*/
+		device.test();
                 
 			
 	}
