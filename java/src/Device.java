@@ -76,8 +76,19 @@ public class Device {
         }
         private void drawShape(Shape shape){
             int i=0;
+            int up=i;
+            //finding upest verticy in path for safe move
+            for(i=1; i<path.length ; i++){
+            	if(path[i].y>path[up].y)
+            		up=i;
+            }
+            moveWireTo(path[up]);
+            int t=up;
             for(i=0 ; i<path.length-1 ; i++){
-                drawLine(path[i], path[i+1]);
+                drawLine(path[t], path[t+1]);
+                t++;
+                if(t==path.length-1)
+                	t=0;
             }
             drawLine(path[i+1],path[0]);
         }
@@ -95,27 +106,32 @@ public class Device {
             else{
                 m=(a.y-b.y)/(a.x-b.x);
                 System.out.println("m = "+ m);
-                stairLength=0.1;
-                dx=Math.sqrt(Math.pow(stairLength, 2)/(1+Math.pow(m, 2)));
+                stairLength=0.5;
+                dx=stairLength/Math.sqrt(1+Math.pow(m, 2));
                 if(b.x-a.x <0)
                 	dx*=-1;
                 System.out.println("dx = "+ dx);
+                
                 dy=Math.sqrt(Math.pow(stairLength, 2)-Math.pow(dx, 2));
+                
                 if(b.y - a.y <0)
                 	dy*=-1;
                 System.out.println("dy = "+ dy);               
-                stairCount=(int) Math.abs(Math.ceil(Math.abs(a.x-b.x)/dx));
+                stairCount=(int) Math.abs(Math.ceil((a.x-b.x)/dx));
                 System.out.println("stair count = "+ stairCount);
                 for(int i=0;i<stairCount; i++){
                 	moveVerticals(dy);
                 	moveHor(dx);
                 	System.out.println("i = " + i);
                 }
+                moveWireTo(b);
             }            
         }
 	private void command(String str){
 		communicator.reconnect();
 		communicator.send(str);
+		System.out.println("rightCol ="+ rightColPos);
+		System.out.println("hor ="+ horPos);
 	}
 	private void resetDevice(){
 		moveVerticalsToPos(MAXHEIGH);
@@ -126,7 +142,7 @@ public class Device {
 		moveHorToPos(a.x);
 	}
     public void test(){
-      drawLine(new Point(5.3,4.0,0.0),new Point(-5.3,0.0,0.0));
+      startDraw("T.obj");
     }
     private void waitForMove(double l){
     	//v=x/t => t=x/v

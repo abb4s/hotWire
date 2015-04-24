@@ -99,20 +99,17 @@ public class Shape {
             
         }
         catch(FileNotFoundException e){
-           
+           System.out.println(e);
         } 
         catch (IOException ex) {
-            
+            System.out.println(ex);
         }
 
         return null;
     }
     public Point[] getPath(){
-        int x;
-        Integer x1=12;
         
-        
-    	return null;
+        return points;
     }
 
 }
